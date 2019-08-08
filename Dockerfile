@@ -30,7 +30,6 @@ RUN git checkout tags/v1.3.2 && git submodule update --init --recursive && \
 WORKDIR /p4
 RUN go get -u github.com/golang/protobuf/protoc-gen-go
 
-RUN git clone https://github.com/p4lang/p4runtime
 RUN git clone https://github.com/googleapis/googleapis
 
 ENV PROTO_DIR /p4/p4runtime/proto
@@ -48,6 +47,11 @@ ENV PROTOFLAGS="-I. -I/p4/googleapis"
 
 RUN mkdir /p4/go_out
 COPY compile_protos.sh /p4/compile_protos.sh
+ENV BRANCH master
+ADD https://api.github.com/repos/p4lang/p4runtime/git/refs/heads/$BRANCH version.json
+RUN git clone https://github.com/p4lang/p4runtime
+WORKDIR /p4/p4runtime
+RUN git checkout $BRANCH
 WORKDIR /p4/p4runtime/proto
 RUN cp -r /p4/googleapis/google /p4/p4runtime/proto
 RUN chmod +x /p4/compile_protos.sh && /p4/compile_protos.sh && ls /p4/go_out
