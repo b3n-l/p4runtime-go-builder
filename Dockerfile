@@ -12,7 +12,7 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
-ENV JOBS 8
+ENV JOBS 4
 RUN mkdir /p4
 WORKDIR /p4
 
